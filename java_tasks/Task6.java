@@ -242,18 +242,45 @@ public class Task6 {
 		assertEquals(ulam(206), 1856);
 	}
 
-//	public String longestNonrepeatingSubstring(String s) {
-//		return s;
-//	}
-//	
-//	
-////	@Test
-////	public void test7() {
-////		assertEquals(longestNonrepeatingSubstring("abcabcbb"), "abc");
-////		assertEquals(longestNonrepeatingSubstring("aaaaaa"), "a");
-////		assertEquals(longestNonrepeatingSubstring("abcde"), "abcde");
-////		assertEquals(longestNonrepeatingSubstring("abcda"), "abcd");
-////	}
+	public String longestNonrepeatingSubstring(String s) {
+		s = s.toLowerCase();
+
+		int mask = 0, nMask, startM = 0, lengthM = 0, start = 0, length = 0;
+
+		for (int i = 0; i < s.length(); i++) {
+			nMask = 1 << (s.charAt(i) - 'a');
+
+			if ((nMask & mask) == 0) {
+				mask |= nMask;
+				length++;
+			} else {
+				if (length > lengthM) {
+					startM = start;
+					lengthM = length;
+				}
+
+				start = i;
+				length = 1;
+				mask = nMask;
+			}
+		}
+
+		if (length > lengthM) {
+			startM = start;
+			lengthM = length;
+		}
+
+		return s.substring(startM, startM + lengthM);
+	}
+
+
+	@Test
+	public void test7() {
+		assertEquals(longestNonrepeatingSubstring("abcabcbb"), "abc");
+		assertEquals(longestNonrepeatingSubstring("aaaaaa"), "a");
+		assertEquals(longestNonrepeatingSubstring("abcde"), "abcde");
+		assertEquals(longestNonrepeatingSubstring("abcda"), "abcd");
+	}
 	
 	// 8.
 	

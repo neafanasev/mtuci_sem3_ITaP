@@ -98,9 +98,9 @@ public class Task5 {
 	
 	// 3
 	public boolean canComplete(String s1, String s2) {
-		List<Character> c1 = new ArrayList<Character>();
+		List<Character> c1 = new ArrayList<>();
 		for (char c : s1.toCharArray()) c1.add(c);
-		List<Character> c2 = new ArrayList<Character>();
+		List<Character> c2 = new ArrayList<>();
 		for (char c : s2.toCharArray()) c2.add(c);
 
 		while (c1.size() != 0 && c2.size() != 0) {
@@ -115,7 +115,6 @@ public class Task5 {
 			return true;
 		}
 		return false;
-		
 	}
 	
 	@Test
@@ -168,7 +167,7 @@ public class Task5 {
 	}
 
 	public Set<Character> getVowels(String s) {
-		Set<Character> sc = new HashSet<Character>();
+		Set<Character> sc = new HashSet<>();
 		
 		for (char c : s.toCharArray()) {
 			if (c == 'a' || c == 'e' || c == 'i' || c == 'o' || c == 'u') {
@@ -248,7 +247,6 @@ public class Task5 {
 	// 8. 
 	public String getSha256Hash(String s) {
 		return DigestUtils.shaHex(s);
-
 	}
 
 	@Test
@@ -291,17 +289,44 @@ public class Task5 {
 
 
 	// 10. 
-	public boolean isHexLattice(int k) {
-		double n = (3 + Math.sqrt(12*k - 3))/6.0;
-		return n - (int) n == 0;
+	public String hexLattice(int k) {
+		double nd = (3 + Math.sqrt(12*k - 3))/6.0;
+		String s = "";
+		if (nd - (int) nd != 0) {
+			return "Invalid";
+		} else {
+			int n = (int) Math.ceil(nd);
+			int c = (n*2-1)/2;
+
+			// Строчки до средней включая её
+			for (int i = 0; i < c + 1; i++) {
+				s = s + latticeRow(n, i) + "\n";
+			}
+
+			// Строчки после средней
+			for (int i = c - 1; i >= 0; i--) {
+				s = s + latticeRow(n, i) + "\n";
+			}
+
+			String resS = s.substring(0, s.length() - 1);
+			return resS;
+		}
+
+	}
+
+	public String latticeRow(int n, int i) {
+		String ts = " ".repeat(n-i);
+		for (int j = 0; j < n + i; j++) ts += "o ";
+		ts += " ".repeat(n-i-1);
+		return ts;
 	}
 	
 	@Test
 	public void test10() {
-		assertEquals(isHexLattice(1), true);
-		assertEquals(isHexLattice(7), true);
-		assertEquals(isHexLattice(19), true);
-		assertEquals(isHexLattice(21), false);
+		assertEquals(hexLattice(1), " o ");
+		assertEquals(hexLattice(7), "  o o  \n o o o \n  o o  ");
+		assertEquals(hexLattice(19), "   o o o   \n  o o o o  \n o o o o o \n  o o o o  \n   o o o   ");
+		assertEquals(hexLattice(21), "Invalid");
 	}
 	
 	
